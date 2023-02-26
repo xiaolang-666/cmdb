@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  backup:
+    build:
+      context: ./cmdb-backend/
+      dockerfile: Dockerfile
+    image: cmdb-backup:v1
+    container_name: cmdb-backup
+    command: python manage.py runserver 0.0.0.0:9090
+    restart: unless-stopped
+    ports:
+      - 9090:9090
+    healthcheck:
+      interval: 1m
+      timeout: 3s
+      retries: 3
+      test: curl http://localhost:9090/ping
+    environment:
+      - TZ=Asia/Shanghai
